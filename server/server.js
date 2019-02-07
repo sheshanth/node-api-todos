@@ -42,12 +42,12 @@ app.get('/todos/:_id', (req, res) => {
     Todo.findById(id)
         .then((todo) => {
             if (!todo) {
-                return res.status(400).send("_id not found in the collection.")
+                return res.status(404).send("_id not found in the collection.")
             }
             res.send({ todo })
         })
         .catch((err) => {
-            res.status(400).send(err)
+            res.status(404).send(err)
         })
 })
 
