@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyparser = require('body-parser')
+const { ObjectID } = require('mongodb')
 
 const { mongoose } = require('./db/mongoose')
 const { Todo } = require('./model/todo')
@@ -33,13 +34,21 @@ app.get('/todos', (req, res) => {
 
 app.get('/todos/:_id', (req, res) => {
     let id = req.params._id
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send("Invalid ID.")
+    }
+
     Todo.findById(id)
-    .then((todo) => {
-        res.send(todo)
-    })
-    .catch((err) => {
-        res.status(400).send(err)
-    })
+        .then((todo) => {
+            if (!todo) {
+                return res.status(400).send("_id not found in the collection.")
+            }
+            res.send({ todo })
+        })
+        .catch((err) => {
+            res.status(400).send(err)
+        })
 })
 
 app.listen(3000, () => {

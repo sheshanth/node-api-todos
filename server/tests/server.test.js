@@ -80,3 +80,11 @@ describe('GET /todos', () => {
             .end(done)
     })
 })
+
+
+/* describe('GER /todos/:_id', () => {
+    it('should get the particular todo of specified _id', (done) => {
+        request(app)
+        .get('/todos/')    
+    })
+}) */
