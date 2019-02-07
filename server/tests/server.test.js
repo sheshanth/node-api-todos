@@ -111,3 +111,28 @@ describe('GET /todos/:_id', () => {
     })
 
 })
+
+describe('DELETE /todos/:_id', () => {
+    it('should delete a todo ', (done) => {
+        request(app)
+        .delete(`/todos/${todos[0]._id}`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.todo.text).toBe(todos[0].text)
+        })
+        .end(done)
+    })    
+    it('should return 404 if invalid id', (done) => {
+        request(app)
+        .delete(`/todos/123asd`)
+        .expect(404)
+        .end(done)
+    })
+    it('should return 404 on no document in collection', (done) => {
+        request(app)
+        .delete(`/todos/${new ObjectID().toHexString()}`)
+        .expect(404)
+        .end(done)
+    })
+})
+
