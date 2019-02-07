@@ -31,6 +31,17 @@ app.get('/todos', (req, res) => {
         })
 })
 
+app.get('/todos/:_id', (req, res) => {
+    let id = req.params._id
+    Todo.findById(id)
+    .then((todo) => {
+        res.send(todo)
+    })
+    .catch((err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.listen(3000, () => {
     console.log(`connected successfully on port 3000.`);
 })
