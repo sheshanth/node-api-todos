@@ -172,7 +172,7 @@ describe('PATCH /todos/:_id', () => {
         .expect((res) => {
             expect(res.body.todo.text).toBe(text)
             expect(res.body.todo.completed).toBe(false)
-            expect(res.body.todo.completedAt).toBeNull()
+            expect(res.body.todo.completedAt).toBeFalsy()
         })
         .end(done)
 

@@ -1,4 +1,16 @@
-const express = require('express')
+let env = process.env.NODE_ENV || 'development'
+console.log(`env: ${env}`);
+
+if (env === "development") {
+    process.env.PORT = 3000
+    process.env.MONGODB_URI = "mongodb://localhost/TodoApp"
+} else if (env ==='test') {
+    process.env.PORT = 3000
+    process.env.MONGODB_URI = "mongodb://localhost/TodoAppTest"
+}
+
+
+    const express = require('express')
 const bodyparser = require('body-parser')
 const { ObjectID } = require('mongodb')
 const _ = require('lodash')
@@ -90,15 +102,15 @@ app.patch('/todos/:_id', (req, res) => {
     }
 
     Todo.findByIdAndUpdate(id, { $set: body }, { new: true })
-    .then((todo) => {
-        if(!todo) {
-            return res.status(400).send()
-        }
-        res.send({todo})
-    })
-    .catch((err) => {
-        res.status(404).send()
-    })
+        .then((todo) => {
+            if (!todo) {
+                return res.status(400).send()
+            }
+            res.send({ todo })
+        })
+        .catch((err) => {
+            res.status(404).send()
+        })
 })
 
 app.listen(port, () => {
