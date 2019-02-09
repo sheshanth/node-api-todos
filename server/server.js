@@ -4,19 +4,20 @@ console.log(`env: ${env}`);
 if (env === "development") {
     process.env.PORT = 3000
     process.env.MONGODB_URI = "mongodb://localhost/TodoApp"
-} else if (env ==='test') {
+} else if (env === 'test') {
     process.env.PORT = 3000
     process.env.MONGODB_URI = "mongodb://localhost/TodoAppTest"
 }
 
 
-    const express = require('express')
+const express = require('express')
 const bodyparser = require('body-parser')
 const { ObjectID } = require('mongodb')
 const _ = require('lodash')
 
 const { mongoose } = require('./db/mongoose')
 const { Todo } = require('./model/todo')
+const { User } = require('./model/user')
 
 const port = process.env.PORT || 3000
 const app = express()
@@ -111,6 +112,21 @@ app.patch('/todos/:_id', (req, res) => {
         .catch((err) => {
             res.status(404).send()
         })
+})
+
+
+//POST /Users
+
+app.post('/users', (req, res) => {
+    let body = _.pick(req.body, ['email', 'password'])
+    let user = new User(body)
+
+    user.save()
+        .then((user) => {
+            res.send(user)
+        }).catch((err) => {
+            res.status(400).send(err)
+        });
 })
 
 app.listen(port, () => {
