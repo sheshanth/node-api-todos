@@ -32,7 +32,7 @@ let userSchema = new mongoose.Schema({
     }]
 })
 
-userSchema.methods.toJSON = function () {
+userSchema.methods.toJSON = function () { //filter response 
     let user = this
     let userObject = user.toObject()
 
@@ -52,6 +52,27 @@ userSchema.methods.generateAuthToken = function () {
     })
 }
 
+userSchema.statics.findByToken = function (token) {
+    var User = this
+    var decoded
+
+    try {
+        decoded = jwt.verify(token, 'asd123')
+    } catch (error) {
+        return Promise.reject(error)
+    }
+
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.access': 'auth',
+        'tokens.token': token
+    })
+}
+
+/* userSchema.pre('save', function (next) {
+    var user = this
+
+}) */
 
 let User = mongoose.model('User', userSchema)
 
